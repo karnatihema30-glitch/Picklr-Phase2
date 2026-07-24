@@ -1,38 +1,73 @@
-@model List<PicklProgram>
+@model List<Picklr.Models.PicklProgram>
+
 @{
     ViewData["Title"] = "Programs";
 }
 
-<h2 class="mt-3">Programs</h2>
+<h2 class="mt-3">@ViewBag.Action Program</h2>
 
-<a asp-action="AddEdit" class="btn btn-primary mb-3">Add Program</a>
+<a asp-action="AddEdit" class="btn btn-primary mb-3">
+    Add Program
+</a>
+
 
 <table class="table table-bordered table-striped">
+
     <thead class="table-dark">
+
         <tr>
-            <th>Name</th>
-            <th>Description</th>
+            <th>Program</th>
+            <th>Club</th>
+            <th>Available Days</th>
             <th>Fee</th>
             <th></th>
             <th></th>
         </tr>
+
     </thead>
+
     <tbody>
+
         @foreach (var program in Model)
         {
             <tr>
-                <td>@program.Name</td>
-                <td>@program.Description</td>
-                <td>@program.Fee.ToString("C")</td>
+
                 <td>
-                    <a asp-action="AddEdit" asp-route-id="@program.ProgramID"
-                       class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <strong>@program.Name</strong><br />
+                    @program.Description
                 </td>
+
                 <td>
-                    <a asp-action="Delete" asp-route-id="@program.ProgramID"
-                       class="btn btn-sm btn-outline-danger">Delete</a>
+                    @program.Club?.Name
                 </td>
+
+                <td>
+                    @program.AvailableDays
+                </td>
+
+                <td>
+                    @program.Fee.ToString("C")
+                </td>
+
+                <td>
+                    <a asp-action="AddEdit"
+                       asp-route-id="@program.ProgramID"
+                       class="btn btn-outline-primary btn-sm">
+                        Edit
+                    </a>
+                </td>
+
+                <td>
+                    <a asp-action="Delete"
+                       asp-route-id="@program.ProgramID"
+                       class="btn btn-outline-danger btn-sm">
+                        Delete
+                    </a>
+                </td>
+
             </tr>
         }
+
     </tbody>
+
 </table>

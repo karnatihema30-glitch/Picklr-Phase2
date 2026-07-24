@@ -6,70 +6,96 @@ namespace Picklr.Areas.Admin.Controllers
     [Area("Admin")]
     public class ClubController : Controller
     {
-        private PicklrContext context;
+        private readonly PicklrContext context;
 
         public ClubController(PicklrContext ctx)
         {
             context = ctx;
         }
 
-        // GET /Admin/Club/List
+        // GET: /Admin/Club/List
         public IActionResult List()
         {
-            var clubs = context.Clubs.OrderBy(c => c.Name).ToList();
+            var clubs = context.Clubs
+                .OrderBy(c => c.Name)
+                .ToList();
+
             return View(clubs);
         }
 
-        // GET /Admin/Club/AddEdit        — shows a blank form (Add)
-        // GET /Admin/Club/AddEdit/3      — loads the Club with id=3 (Edit)
+        // GET: /Admin/Club/AddEdit
+        // GET: /Admin/Club/AddEdit/5
         [HttpGet]
         public IActionResult AddEdit(int? id)
         {
-            var club = (id == null)
-                ? new Club()
-                : context.Clubs.Find(id) ?? new Club();
+            Club club;
+
+            if (id == null)
+            {
+                club = new Club();
+            }
+            else
+            {
+                club = context.Clubs.Find(id) ?? new Club();
+            }
 
             ViewBag.Action = (id == null) ? "Add" : "Edit";
+
             return View(club);
         }
 
-        // POST — handle both Add and Edit based on ClubID
+        // POST: /Admin/Club/AddEdit
         [HttpPost]
         public IActionResult AddEdit(Club club)
         {
             if (ModelState.IsValid)
             {
                 if (club.ClubID == 0)
+                {
                     context.Clubs.Add(club);
+                }
                 else
+                {
                     context.Clubs.Update(club);
+                }
 
                 context.SaveChanges();
+
                 TempData["message"] = $"'{club.Name}' was saved successfully.";
-                return RedirectToAction("List"); // PRG: redirect after POST
+
+                return RedirectToAction("List");
             }
 
-            // Validation failed — redisplay the form
             ViewBag.Action = (club.ClubID == 0) ? "Add" : "Edit";
+
             return View(club);
         }
 
-        // GET /Admin/Club/Delete/3 — confirmation page
+        // GET: /Admin/Club/Delete/5
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var club = context.Clubs.Find(id) ?? new Club();
+            var club = context.Clubs.Find(id);
+
+            if (club == null)
+            {
+                return RedirectToAction("List");
+            }
+
             return View(club);
         }
 
-        // POST — perform the delete
+        // POST: /Admin/Club/Delete
         [HttpPost]
         public IActionResult Delete(Club club)
         {
             context.Clubs.Remove(club);
+
             context.SaveChanges();
+
             TempData["message"] = $"'{club.Name}' was deleted.";
-            return RedirectToAction("List"); // PRG
+
+            return RedirectToAction("List");
         }
     }
 }

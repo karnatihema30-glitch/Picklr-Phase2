@@ -6,9 +6,18 @@ var builder = WebApplication.CreateBuilder(args);
 // Add MVC services
 builder.Services.AddControllersWithViews();
 
-// Add EF Core DI
+// Add EF Core
 builder.Services.AddDbContext<PicklrContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("PicklrContext")));
+
+// Add Session services
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -21,16 +30,21 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+
 app.UseRouting();
+
+// Enable Session
+app.UseSession();
+
 app.UseAuthorization();
 
-// Admin area route — must come BEFORE the default route
+// Admin area route
 app.MapAreaControllerRoute(
     name: "admin",
     areaName: "Admin",
     pattern: "Admin/{controller=Home}/{action=Index}/{id?}");
 
-// Default (client) route
+// Default route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");

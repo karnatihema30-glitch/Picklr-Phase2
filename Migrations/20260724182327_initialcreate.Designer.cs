@@ -10,8 +10,8 @@ using Picklr.Models;
 namespace Picklr.Migrations
 {
     [DbContext(typeof(PicklrContext))]
-    [Migration("20260626170612_initial")]
-    partial class initial
+    [Migration("20260724182327_initialcreate")]
+    partial class initialcreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,14 +72,17 @@ namespace Picklr.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Location")
                         .IsRequired()
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ClubID");
@@ -100,6 +103,13 @@ namespace Picklr.Migrations
                             Description = "A vibrant outdoor facility with 8 courts and a pro shop.",
                             Location = "456 Oak Ave, Evanston, IL",
                             Name = "Picklr Northside"
+                        },
+                        new
+                        {
+                            ClubID = 3,
+                            Description = "Modern indoor pickleball club located in New York.",
+                            Location = "789 Madison Ave, New York, NY",
+                            Name = "Picklr New York"
                         });
                 });
 
@@ -109,18 +119,29 @@ namespace Picklr.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("AvailableDays")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("ClubID")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Description")
                         .IsRequired()
+                        .HasMaxLength(500)
                         .HasColumnType("TEXT");
 
                     b.Property<decimal>("Fee")
-                        .HasColumnType("TEXT");
+                        .HasColumnType("decimal(8,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
+                        .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
                     b.HasKey("ProgramID");
+
+                    b.HasIndex("ClubID");
 
                     b.ToTable("Programs");
 
@@ -128,6 +149,8 @@ namespace Picklr.Migrations
                         new
                         {
                             ProgramID = 1,
+                            AvailableDays = "Monday, Wednesday, Friday",
+                            ClubID = 1,
                             Description = "Drop-in open play for new players. No experience needed.",
                             Fee = 10.00m,
                             Name = "Beginner Open Play"
@@ -135,6 +158,8 @@ namespace Picklr.Migrations
                         new
                         {
                             ProgramID = 2,
+                            AvailableDays = "Tuesday, Thursday",
+                            ClubID = 1,
                             Description = "Weekly skill-building clinic led by a certified coach.",
                             Fee = 25.00m,
                             Name = "Intermediate Clinic"
@@ -142,10 +167,41 @@ namespace Picklr.Migrations
                         new
                         {
                             ProgramID = 3,
+                            AvailableDays = "Saturday, Sunday",
+                            ClubID = 2,
                             Description = "Competitive round-robin tournament for rated players.",
                             Fee = 40.00m,
                             Name = "Advanced Tournament"
+                        },
+                        new
+                        {
+                            ProgramID = 4,
+                            AvailableDays = "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday",
+                            ClubID = 3,
+                            Description = "The program is designed for beginners.",
+                            Fee = 10.00m,
+                            Name = "Picklr 101"
+                        },
+                        new
+                        {
+                            ProgramID = 5,
+                            AvailableDays = "Saturday",
+                            ClubID = 2,
+                            Description = "Weekend social play for all skill levels.",
+                            Fee = 0.00m,
+                            Name = "Picklr Social"
                         });
+                });
+
+            modelBuilder.Entity("Picklr.Models.PicklProgram", b =>
+                {
+                    b.HasOne("Picklr.Models.Club", "Club")
+                        .WithMany()
+                        .HasForeignKey("ClubID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Club");
                 });
 #pragma warning restore 612, 618
         }

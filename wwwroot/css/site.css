@@ -1,60 +1,116 @@
-/* Picklr — site-specific styles */
+/* ==========================================
+   Picklr - Site Styles
+========================================== */
 
-/* Tighten up the top margin on the main container */
 body {
     padding-top: 0;
+    background-color: #ffffff;
 }
 
-/* ── Homepage hero ─────────────────────────────────── */
+/* ==========================================
+   Navigation
+========================================== */
 
-/* Container — sized to match the image's natural aspect ratio (2232 × 906) */
-.hero-section {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 2232 / 906;   /* keeps full image visible at any viewport width */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background-color: #f8f9fa;  /* shows behind transparent areas of a PNG */
-}
-
-/* The background image lives here so its opacity can be set independently */
-.hero-section::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image: url('/img/homepage_background.jpg');
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
-    opacity: 0.55;              /* lower = more faded; raise toward 1.0 to strengthen */
-}
-
-/* Text card sits above the faded image */
-.hero-overlay {
-    position: relative;         /* stacks above ::before */
-    background-color: rgba(255, 255, 255, 0.25);
-    color: #1a1a1a;
-    text-align: center;
-    padding: 2.5rem 2rem;
-    border-radius: 0.5rem;
-    max-width: 700px;
-    width: 90%;
-}
-
-.hero-overlay p {
-    color: #333;
-}
-
-/* Make footer text slightly smaller */
-footer p {
-    font-size: 0.875rem;
-    margin-bottom: 0;
-}
-
-/* Navbar brand font */
 .navbar-brand {
-    font-size: 1.4rem;
-    letter-spacing: 0.03em;
+    font-size: 1.5rem;
+    font-weight: bold;
+    letter-spacing: .03rem;
+}
+
+.navbar .nav-link {
+    color: white !important;
+}
+
+.navbar .nav-link:hover {
+    color: #e9ecef !important;
+}
+
+/* ==========================================
+   Filter Panel
+========================================== */
+
+.filter-panel {
+    border: 1px solid #dee2e6;
+    border-radius: .5rem;
+    background-color: #f8f9fa;
+    overflow: hidden;
+}
+
+.filter-header {
+    background-color: #198754;
+    color: white;
+    font-weight: bold;
+    padding: 12px 15px;
+    font-size: 1.1rem;
+}
+
+.filter-body {
+    padding: 20px;
+}
+
+/* ==========================================
+   Program Table
+========================================== */
+
+.program-table {
+    margin-top: 10px;
+}
+
+.program-table thead th {
+    background-color: #212529;
+    color: white;
+}
+
+.program-table td,
+.program-table th {
+    vertical-align: middle;
+}
+
+/* ==========================================
+   Buttons
+========================================== */
+
+.reserve-btn {
+    width: 90px;
+}
+
+.btn-success,
+.btn-secondary,
+.btn-danger {
+    border-radius: .35rem;
+}
+
+/* ==========================================
+   Alerts
+========================================== */
+
+.alert {
+    border-radius: .5rem;
+}
+
+/* ==========================================
+   Footer
+========================================== */
+
+footer {
+    margin-top: 50px;
+    border-top: 1px solid #dee2e6;
+    padding: 20px;
+    text-align: center;
+}
+
+footer p {
+    font-size: .875rem;
+    margin-bottom: 0;
+    color: gray;
+}
+
+.fa-shopping-cart,
+.fa-cart-shopping{
+    color:white;
+    font-size:20px;
+}
+
+.navbar .badge{
+    font-size:.65rem;
 }

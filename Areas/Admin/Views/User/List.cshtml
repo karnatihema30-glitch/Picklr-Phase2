@@ -1,38 +1,67 @@
-@model List<AppUser>
+@model List<Picklr.Models.AppUser>
+
 @{
     ViewData["Title"] = "Users";
 }
 
 <h2 class="mt-3">Users</h2>
 
-<a asp-action="AddEdit" class="btn btn-primary mb-3">Add User</a>
+<a asp-action="AddEdit" class="btn btn-primary mb-3">
+    Add User
+</a>
+
+@if (TempData["message"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["message"]
+    </div>
+}
 
 <table class="table table-bordered table-striped">
+
     <thead class="table-dark">
+
         <tr>
             <th>Name</th>
             <th>Email</th>
             <th>Role</th>
-            <th></th>
-            <th></th>
+            <th style="width:90px;"></th>
+            <th style="width:90px;"></th>
         </tr>
+
     </thead>
+
     <tbody>
+
         @foreach (var user in Model)
         {
             <tr>
+
                 <td>@user.FullName</td>
+
                 <td>@user.Email</td>
+
                 <td>@user.Role</td>
+
                 <td>
-                    <a asp-action="AddEdit" asp-route-id="@user.UserID"
-                       class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a asp-action="AddEdit"
+                       asp-route-id="@user.UserID"
+                       class="btn btn-outline-primary btn-sm">
+                        Edit
+                    </a>
                 </td>
+
                 <td>
-                    <a asp-action="Delete" asp-route-id="@user.UserID"
-                       class="btn btn-sm btn-outline-danger">Delete</a>
+                    <a asp-action="Delete"
+                       asp-route-id="@user.UserID"
+                       class="btn btn-outline-danger btn-sm">
+                        Delete
+                    </a>
                 </td>
+
             </tr>
         }
+
     </tbody>
+
 </table>

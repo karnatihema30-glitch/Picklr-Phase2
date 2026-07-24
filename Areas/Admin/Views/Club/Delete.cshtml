@@ -1,20 +1,45 @@
-@model Club
+@model Picklr.Models.Club
+
 @{
     ViewData["Title"] = "Delete Club";
 }
 
 <h2 class="mt-3">Delete Club</h2>
 
-<div class="alert alert-warning mt-3" style="max-width:500px;">
-    <p>Are you sure you want to delete <strong>@Model.Name</strong>?</p>
-    <p class="text-muted mb-0">Location: @Model.Location</p>
+<div class="alert alert-danger">
+    <h5>Are you sure you want to delete this club?</h5>
 </div>
 
-<form asp-action="Delete" method="post">
-    @* Pass just the fields the controller needs to delete and display in TempData *@
-    <input type="hidden" asp-for="ClubID" />
-    <input type="hidden" asp-for="Name" />
+<table class="table table-bordered" style="max-width:700px;">
 
-    <button type="submit" class="btn btn-danger">Yes, Delete</button>
-    <a asp-action="List" class="btn btn-secondary ms-2">Cancel</a>
+    <tr>
+        <th style="width:200px;">Club Name</th>
+        <td>@Model.Name</td>
+    </tr>
+
+    <tr>
+        <th>Location</th>
+        <td>@Model.Location</td>
+    </tr>
+
+    <tr>
+        <th>Description</th>
+        <td>@Model.Description</td>
+    </tr>
+
+</table>
+
+<form asp-action="Delete" method="post">
+
+    <input asp-for="ClubID" type="hidden" />
+    <input asp-for="Name" type="hidden" />
+
+    <button type="submit" class="btn btn-danger">
+        Delete
+    </button>
+
+    <a asp-action="List" class="btn btn-secondary">
+        Cancel
+    </a>
+
 </form>

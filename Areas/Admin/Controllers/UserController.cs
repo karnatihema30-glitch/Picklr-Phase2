@@ -6,66 +6,97 @@ namespace Picklr.Areas.Admin.Controllers
     [Area("Admin")]
     public class UserController : Controller
     {
-        private PicklrContext context;
+        private readonly PicklrContext context;
 
         public UserController(PicklrContext ctx)
         {
             context = ctx;
         }
 
-        // GET /Admin/User/List
+        // GET: /Admin/User/List
         public IActionResult List()
         {
-            var users = context.Users.OrderBy(u => u.LastName).ThenBy(u => u.FirstName).ToList();
+            var users = context.Users
+                .OrderBy(u => u.LastName)
+                .ThenBy(u => u.FirstName)
+                .ToList();
+
             return View(users);
         }
 
-        // GET /Admin/User/AddEdit        — blank form (Add)
-        // GET /Admin/User/AddEdit/1      — loads existing record (Edit)
+        // GET: /Admin/User/AddEdit
+        // GET: /Admin/User/AddEdit/5
         [HttpGet]
         public IActionResult AddEdit(int? id)
         {
-            var user = (id == null)
-                ? new AppUser()
-                : context.Users.Find(id) ?? new AppUser();
+            AppUser user;
+
+            if (id == null)
+            {
+                user = new AppUser();
+            }
+            else
+            {
+                user = context.Users.Find(id) ?? new AppUser();
+            }
 
             ViewBag.Action = (id == null) ? "Add" : "Edit";
+
             return View(user);
         }
 
+        // POST: /Admin/User/AddEdit
         [HttpPost]
         public IActionResult AddEdit(AppUser user)
         {
             if (ModelState.IsValid)
             {
                 if (user.UserID == 0)
+                {
                     context.Users.Add(user);
+                }
                 else
+                {
                     context.Users.Update(user);
+                }
 
                 context.SaveChanges();
+
                 TempData["message"] = $"'{user.FullName}' was saved successfully.";
-                return RedirectToAction("List"); // PRG
+
+                return RedirectToAction("List");
             }
 
             ViewBag.Action = (user.UserID == 0) ? "Add" : "Edit";
+
             return View(user);
         }
 
+        // GET: /Admin/User/Delete/5
         [HttpGet]
         public IActionResult Delete(int id)
         {
-            var user = context.Users.Find(id) ?? new AppUser();
+            var user = context.Users.Find(id);
+
+            if (user == null)
+            {
+                return RedirectToAction("List");
+            }
+
             return View(user);
         }
 
+        // POST: /Admin/User/Delete
         [HttpPost]
         public IActionResult Delete(AppUser user)
         {
             context.Users.Remove(user);
+
             context.SaveChanges();
+
             TempData["message"] = $"'{user.FullName}' was deleted.";
-            return RedirectToAction("List"); // PRG
+
+            return RedirectToAction("List");
         }
     }
 }
