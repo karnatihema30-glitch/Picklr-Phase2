@@ -17,5 +17,7 @@ namespace Picklr.Models
 
         [StringLength(500)]
         public string Description { get; set; } = string.Empty;
+
+        public virtual ICollection<PicklProgram> Programs { get; set; } = new List<PicklProgram>();
     }
 }

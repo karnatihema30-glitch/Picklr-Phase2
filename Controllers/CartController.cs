@@ -58,25 +58,25 @@ namespace Picklr.Controllers
 
         // Remove one reservation
         public IActionResult Remove(int id)
-{
-    Cart cart = GetCart();
+        {
+            Cart cart = GetCart();
 
-    var item = cart.Items.FirstOrDefault(i => i.ProgramID == id);
+            var item = cart.Items.FirstOrDefault(i => i.ProgramID == id);
 
-    if (item != null)
-    {
-        DateTime reservationDate = DateTime.Parse(item.Date);
+            if (item != null)
+            {
+                DateTime reservationDate = DateTime.Parse(item.Date);
 
-        TempData["message"] =
-            $"{item.ProgramName} on {reservationDate:ddd, MMM d} was removed from your cart.";
+                TempData["message"] =
+                    $"{item.ProgramName} on {reservationDate:ddd, MMM d} was removed from your cart.";
 
-        cart.Remove(id);
+                cart.Remove(id);
 
-        SaveCart(cart);
-    }
+                SaveCart(cart);
+            }
 
-    return RedirectToAction(nameof(Index));
-}
+            return RedirectToAction(nameof(Index));
+        }
 
         // Empty the cart
         public IActionResult Clear()
